@@ -1,0 +1,30 @@
+Note:
+1. Currently using cppchecker for static analysis -> need to find a good altnerative for rust
+2. Get Ksplit working
+
+To-do:
+1. Rustlings <- finish more excercises
+2. Network Drivers <- understand how they work properly
+3. Block Drivers & Block Cache <- understand the abstraction being done by linux
+(2 & 3 can be covered if Linux Device Drivers is read in detail)
+4. Search and check if k-split analysis has already been done on rust based drivers and also check the static analysis. Supposedly MS had a 15% improvement from switching to rust from C (questionable?)
+5. Setup qemu for testing (i.e use VMs for crash testing)
+6. Convert dm_zero.c to rust (perhaps read some docs on how to convert c to rust, particular techniques and things to note)
+7. Test in the qemu env, run static analysis on it, and KSplit -> compare the results with the C ver.
+8. Report it
+9. Repeat for nullnet
+10. Repeat for nullblk (maybe)
+
+Driver Paper:
+1. Linux Device Drivers (3rd Edition), J. Corbett, A. Rubini, G. Kroah-Hartman, https://lwn.net/Kernel/LDD3/   [[HIGH PRIO]]
+2. Linux Kernel Programming: A comprehensive and practical guide to kernel internals, writing modules, and kernel synchronization (2nd Edition), K. Billimoria [[HIGH PRIO]]
+3. KSplit: Automating Device Driver Isolation for Linux: https://www.usenix.org/conference/osdi22/presentation/huang-yongzhe [[MEDIUM PRIO]]
+
+Rust Paper:
+1. An Empirical Study of Rust-for-Linux: The Success, Dissatisfaction and Compromise, USENIX ATC ’24, https://www.usenix.org/conference/atc24/presentation/li-hongyu [[READ]]
+2. Rust-for-Linux: Understanding the Security Impact of Rust in the Linux Kernel , https://mars-research.github.io/doc/2024-acsac-rfl.pdf [[READ]]
+3. How do programmers use unsafe Rust? https://dl.acm.org/doi/10.1145/3428204 (Should be accessible on campus) [[READ, BUT READ AGAIN]] 
+
+
+Misc/Uncategorised:
+1. RedLeaf: A safe OS written in Rust https://www.usenix.org/conference/osdi20/presentation/narayanan-vikram [[LOW PRIO, BUT VERY INTERESTING]]

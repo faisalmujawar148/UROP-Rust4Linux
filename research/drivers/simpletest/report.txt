@@ -1,0 +1,7 @@
+sudo insmod, sudo rmmod, sudo dmseg | tree
+
+Need to create a headerfile so that cppchecker can analyse better, read the docs on how to make cppchecker work better for kernel modules.
+
+Need to create a bashscript to collect timings accross multiple runs. 
+
+This simple Hello World kernel driver, used pr_info instead of printk to avoid having to specify the log lvl each time (pr_info is a shorthand maro that uses KERN_INFO <<- double check).

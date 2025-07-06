@@ -1,0 +1,37 @@
+#!/bin/sh
+
+echo "Starting custom kernel init..."
+
+# Mount essential filesystems
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t devtmpfs none /dev 2>/dev/null || {
+    # If devtmpfs failed, create essential devices manually
+    mknod /dev/console c 5 1
+    mknod /dev/null c 1 3
+    mknod /dev/zero c 1 5
+    mknod /dev/random c 1 8
+    mknod /dev/urandom c 1 9
+}
+
+# Create some directories
+mkdir -p /dev/pts /dev/shm
+
+# Print system info
+echo ""
+echo "=========================================="
+echo "Welcome to your custom kernel!"
+echo "Kernel version: $(uname -r)"
+echo "Architecture: $(uname -m)"
+echo "Available memory: $(free -h | grep Mem | awk '{print $2}')"
+echo "=========================================="
+echo ""
+
+# Set up environment
+export PATH=/bin:/sbin:/usr/bin
+export HOME=/root
+export TERM=linux
+
+# Start interactive shell
+echo "Starting shell..."
+exec /bin/sh

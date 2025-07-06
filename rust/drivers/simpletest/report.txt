@@ -1,0 +1,5 @@
+to-do:
+
+1. Learn rust kernel dev <- check the docs
+2. Create/convert hello.c to rust
+3. Compare with static analysis and KSplit
