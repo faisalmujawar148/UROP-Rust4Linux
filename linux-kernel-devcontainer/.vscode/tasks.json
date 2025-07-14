@@ -1,0 +1,151 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Prepare Rust",
+            "type": "shell",
+            "command": "make rustavailable && make LLVM=1 rust-analyzer",
+            "options": {
+                "cwd": "${workspaceFolder}/linux/"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Prepare C/C++",
+            "type": "shell",
+            "command": "make compile_commands.json",
+            "options": {
+                "cwd": "${workspaceFolder}/linux/"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Configure kernel",
+            "type": "shell",
+            "command": "make menuconfig",
+            "options": {
+                "cwd": "${workspaceFolder}/linux/"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Default configure kernel",
+            "type": "shell",
+            "command": "make menuconfig",
+            "options": {
+                "cwd": "${workspaceFolder}/linux/"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build kernel without debug symbols",
+            "type": "shell",
+            "command": "make LLVM=1 -j$(nproc)",
+            "options": {
+                "cwd": "${workspaceFolder}/linux/"
+            },
+            "problemMatcher": {
+                "base": "$rustc",
+                "fileLocation": ["relative", "${workspaceFolder}/linux"],
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "focus": true
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build kernel with debug symbols",
+            "type": "shell",
+            "command": "make LLVM=1 CONFIG_DEBUG_INFO=y CONFIG_DEBUG_INFO_REDUCED=n CONFIG_DEBUG_INFO_SPLIT=y CONFIG_DEBUG_INFO_DWARF5=y -j$(nproc)",
+            "options": {
+                "cwd": "${workspaceFolder}/linux/"
+            },
+            "problemMatcher": {
+                "owner": "rust",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": [
+                    {
+                        "regexp": "^\\s*(-->?)\\s*(.+):(\\d+):(\\d+)",
+                        "file": 2,
+                        "line": 3,
+                        "column": 4
+                    },
+                    {
+                        "regexp": "^\\s*(error|warning|note|help):\\s+(.*)$",
+                        "severity": 1,
+                        "message": 2
+                    }
+                ]
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run kernel",
+            "type": "shell",
+            "command": "vng -r arch/x86/boot/bzImage --memory=1G --disable-microvm --verbose",
+            "options": {
+                "cwd": "${workspaceFolder}/linux/"
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": ["Build Kernel without debug symbols"],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run kernel in debug mode",
+            "type": "shell",
+            "command": "vng -r arch/x86/boot/bzImage --memory=1G --disable-microvm --verbose --debug",
+            "options": {
+                "cwd": "${workspaceFolder}/linux/"
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": ["Build kernel with debug symbols"],
+            "problemMatcher": {
+                "owner": "custom",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": [
+                  {
+                    "regexp": ".",
+                    "file": 1,
+                    "location": 2,
+                    "message": 3
+                  }
+                ],
+                "background": {
+                  "activeOnStart": true,
+                  "beginsPattern": ".",
+                //   "endsPattern": "virtme-ng-init: initialization done",  // This matches the specific string when the kernel is ready
+                  "endsPattern": "Booting the kernel"  // This matches the specific string when the kernel is ready
+                }
+            },
+            "isBackground": true,
+        },
+    ]
+}

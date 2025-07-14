@@ -1,0 +1,22 @@
+{
+    "configurations": [
+      {
+        "name": "Kernel Module",
+        "compilerPath": "/usr/bin/gcc",
+        "cStandard": "gnu11",
+        "intelliSenseMode": "gcc-x64",
+        "defines": [
+          "__KERNEL__",
+          "MODULE"
+        ],
+        "includePath": [
+          "${workspaceFolder}/linux-rust/include",
+          "${workspaceFolder}/linux-rust/include/uapi",
+          "${workspaceFolder}/linux-rust/arch/x86/include",
+          "${workspaceFolder}/linux-rust/arch/x86/include/uapi"
+        ]
+      }
+    ],
+    "version": 4
+  }
+  

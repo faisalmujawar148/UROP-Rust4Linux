@@ -1,0 +1,146 @@
+// SPDX-License-Identifier: GPL-2.0
+
+//! Simple Rust driver for benchmarking
+
+use kernel::prelude::*;
+use kernel::{
+    chrdev::{self, Registration},
+    file::{File, Operations},
+    io_buffer::{IoBufferReader, IoBufferWriter},
+    sync::{Arc, Mutex},
+    ktime,
+};
+
+module! {
+    type: SimpleDriver,
+    name: "simple_driver_rust",
+    author: "Benchmark Test",
+    description: "Simple Rust driver for benchmarking",
+    license: "GPL",
+}
+
+#[derive(Default)]
+struct BenchmarkStats {
+    total_operations: u64,
+    total_time_ns: u64,
+    min_time_ns: u64,
+    max_time_ns: u64,
+    avg_time_ns: u64,
+}
+
+impl BenchmarkStats {
+    fn update(&mut self, time_ns: u64) {
+        self.total_operations += 1;
+        self.total_time_ns += time_ns;
+        
+        if self.min_time_ns == 0 || time_ns < self.min_time_ns {
+            self.min_time_ns = time_ns;
+        }
+        
+        if time_ns > self.max_time_ns {
+            self.max_time_ns = time_ns;
+        }
+        
+        self.avg_time_ns = self.total_time_ns / self.total_operations;
+    }
+}
+
+struct SimpleDriverData {
+    buffer: [u8; 4096],
+    read_stats: BenchmarkStats,
+    write_stats: BenchmarkStats,
+}
+
+impl SimpleDriverData {
+    fn new() -> Self {
+        Self {
+            buffer: [0; 4096],
+            read_stats: BenchmarkStats::default(),
+            write_stats: BenchmarkStats::default(),
+        }
+    }
+}
+
+struct SimpleDriver {
+    _chrdev_reg: Arc<Registration<SimpleDriverData>>,
+}
+
+impl kernel::Module for SimpleDriver {
+    fn init(_module: &'static ThisModule) -> Result<Self> {
+        pr_info!("Simple Rust Driver: Initializing\n");
+        
+        let chrdev_reg = Registration::new_pinned(
+            fmt!("simple_bench_rust"),
+            0,
+            SimpleDriverData::new(),
+        )?;
+        
+        pr_info!("Simple Rust Driver: Initialized successfully\n");
+        Ok(SimpleDriver {
+            _chrdev_reg: chrdev_reg,
+        })
+    }
+}
+
+impl Drop for SimpleDriver {
+    fn drop(&mut self) {
+        pr_info!("Simple Rust Driver: Goodbye\n");
+    }
+}
+
+impl Operations for SimpleDriverData {
+    type OpenData = ();
+    type Data = Arc<Mutex<SimpleDriverData>>;
+
+    fn open(_data: &Arc<Mutex<SimpleDriverData>>, _file: &File) -> Result<Self::OpenData> {
+        Ok(())
+    }
+
+    fn read(
+        data: &Arc<Mutex<SimpleDriverData>>,
+        _file: &File,
+        writer: &mut impl IoBufferWriter,
+        offset: u64,
+    ) -> Result<usize> {
+        let start_time = ktime::ktime_get();
+        
+        let mut guard = data.lock();
+        let result = if offset >= 4096 {
+            0
+        } else {
+            let end = core::cmp::min(offset as usize + writer.len(), 4096);
+            let bytes_to_read = end - offset as usize;
+            writer.write_slice(&guard.buffer[offset as usize..end])?;
+            bytes_to_read
+        };
+        
+        let elapsed_ns = ktime::ktime_to_ns(ktime::ktime_sub(ktime::ktime_get(), start_time));
+        guard.read_stats.update(elapsed_ns as u64);
+        
+        Ok(result)
+    }
+
+    fn write(
+        data: &Arc<Mutex<SimpleDriverData>>,
+        _file: &File,
+        reader: &mut impl IoBufferReader,
+        offset: u64,
+    ) -> Result<usize> {
+        let start_time = ktime::ktime_get();
+        
+        let mut guard = data.lock();
+        let result = if offset >= 4096 {
+            return Err(ENOSPC);
+        } else {
+            let end = core::cmp::min(offset as usize + reader.len(), 4096);
+            let bytes_to_write = end - offset as usize;
+            reader.read_slice(&mut guard.buffer[offset as usize..end])?;
+            bytes_to_write
+        };
+        
+        let elapsed_ns = ktime::ktime_to_ns(ktime::ktime_sub(ktime::ktime_get(), start_time));
+        guard.write_stats.update(elapsed_ns as u64);
+        
+        Ok(result)
+    }
+}

@@ -1,0 +1,1 @@
+savedcmd_simple_driver.ko := ld.lld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T /workspaces/linux-kernel-devcontainer/linux-rust/scripts/module.lds -o simple_driver.ko simple_driver.o simple_driver.mod.o .module-common.o
