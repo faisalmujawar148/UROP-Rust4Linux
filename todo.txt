@@ -1,5 +1,5 @@
 qemu
 
-linux qemu file setup w/ rust enabled
+DONE -linux qemu file setup w/ rust enabled
 
-find how to understand blockcache layer + find good tools for comparing (benchmarking tools)
+find how to understand blockcache layer (WIP) + find good tools for comparing (benchmarking tools) - DONE

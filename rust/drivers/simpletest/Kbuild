@@ -1,3 +1,1 @@
-obj-m := simpletest.o
-simpletest-objs := simpletest.o
-
+obj-m += simpletest.o
