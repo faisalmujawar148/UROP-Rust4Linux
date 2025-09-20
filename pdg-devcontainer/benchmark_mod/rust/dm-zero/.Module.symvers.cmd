@@ -1,0 +1,1 @@
+savedcmd_Module.symvers :=  /workspaces/UROP-Rust4Linux/pdg-devcontainer/linux-rust/scripts/mod/modpost -M          -o Module.symvers -T modules.order -i /workspaces/UROP-Rust4Linux/pdg-devcontainer/linux-rust/Module.symvers -e 

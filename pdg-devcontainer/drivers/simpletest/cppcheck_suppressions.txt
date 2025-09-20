@@ -1,0 +1,3 @@
+# Suppress unknown-function errors on kernel macros
+*#unknownFunction*
+

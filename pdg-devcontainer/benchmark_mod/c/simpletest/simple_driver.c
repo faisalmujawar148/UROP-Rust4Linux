@@ -4,24 +4,24 @@
  * C out-of-tree sample with benchmark
  */
 
+ #include <linux/init.h>
  #include <linux/module.h>
  #include <linux/kernel.h>
-#include <linux/slab.h>
-#include <linux/types.h>
- #include <linux/types.h>
+ #include <linux/slab.h>
  #include <linux/ktime.h>
  
  #define ITERATIONS 10000
  
  static int *numbers;
-static int __init c_out_of_tree_init(void);
+ static size_t num_len;
+ 
  static int __init c_out_of_tree_init(void)
  {
      ktime_t start, end;
      s64 delta_ns;
      size_t i;
  
-     pr_info("C out-of-tree sample (init)\n");
+     pr_info("Rust out-of-tree sample (init)\n");
  
      /* Allocate array */
      numbers = kmalloc_array(ITERATIONS, sizeof(int), GFP_KERNEL);
@@ -41,17 +41,19 @@ static int __init c_out_of_tree_init(void);
  
      num_len = ITERATIONS;
      return 0;
-static void __exit c_out_of_tree_exit(void);
-static void __exit c_out_of_tree_exit(void);
-     pr_info("Module exit, vector length: %zu\n", num_len);
-     pr_info("C out-of-tree sample (exit)\n");
-module_init(c_out_of_tree_init);
-module_exit(c_out_of_tree_exit);
+ }
  
-MODULE_LICENSE("GPL v2");
-MODULE_AUTHOR("The Rust for Linux folks");
-MODULE_DESCRIPTION("C out-of-tree sample with C version benchmark");
+ static void __exit c_out_of_tree_exit(void)
+ {
+     pr_info("Module exit, vector length: %zu\n", num_len);
+     pr_info("Rust out-of-tree sample (exit)\n");
+     kfree(numbers);
+ }
+ 
+ module_init(c_out_of_tree_init);
+ module_exit(c_out_of_tree_exit);
+ 
  MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("The Rust for Linux folks");
- MODULE_DESCRIPTION("C out-of-tree sample with C version benchmark");
+ MODULE_AUTHOR("Faisal");
+ MODULE_DESCRIPTION("Rust out-of-tree sample with C version benchmark");
  

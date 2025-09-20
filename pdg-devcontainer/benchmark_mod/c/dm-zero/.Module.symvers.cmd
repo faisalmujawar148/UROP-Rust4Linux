@@ -1,0 +1,1 @@
+savedcmd_Module.symvers :=  /workspaces/linux-kernel-devcontainer/linux-rust/scripts/mod/modpost -M          -o Module.symvers -T modules.order -i /workspaces/linux-kernel-devcontainer/linux-rust/Module.symvers -e 

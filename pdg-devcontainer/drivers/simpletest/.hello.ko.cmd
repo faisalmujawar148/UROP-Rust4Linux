@@ -1,0 +1,1 @@
+cmd_/home/cim/ug/zmac691/research/drivers/simpletest/hello.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/cim/ug/zmac691/research/drivers/simpletest/hello.ko /home/cim/ug/zmac691/research/drivers/simpletest/hello.o /home/cim/ug/zmac691/research/drivers/simpletest/hello.mod.o;  true
