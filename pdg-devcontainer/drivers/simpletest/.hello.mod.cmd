@@ -1,0 +1,1 @@
+cmd_/home/cim/ug/zmac691/research/drivers/simpletest/hello.mod := { echo  /home/cim/ug/zmac691/research/drivers/simpletest/hello.o;  echo; } > /home/cim/ug/zmac691/research/drivers/simpletest/hello.mod
