@@ -5,10 +5,10 @@ CLANG_FLAGS_MODULE += -fno-conserve-stack
 KBUILD_CFLAGS_REMOVE   += -fconserve-stack
 KBUILD_AFLAGS_REMOVE   += -fconserve-stack
 all:
-	make LLVM=1 -C $(KERNEL_DIR) M=$(PWD) modules
+	make -C $(KERNEL_DIR) M=$(PWD) modules CC=gcc
 
 clean:
-	make LLVM=1 -C $(KERNEL_DIR) M=$(PWD) clean
+	make -C $(KERNEL_DIR) M=$(PWD) clean CC=gcc
 
 install:
 	sudo insmod zero.ko

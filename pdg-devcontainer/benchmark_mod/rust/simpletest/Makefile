@@ -5,10 +5,10 @@ CLANG_FLAGS_MODULE += -fno-conserve-stack
 KBUILD_CFLAGS_REMOVE   += -fconserve-stack
 KBUILD_AFLAGS_REMOVE   += -fconserve-stack
 all:
-	make LLVM=1 -C $(KERNEL_DIR) M=$(PWD) modules
+	make -C $(KERNEL_DIR) M=$(PWD) modules CC=gcc
 
 clean:
-	make LLVM=1 -C $(KERNEL_DIR) M=$(PWD) clean
+	make -C $(KERNEL_DIR) M=$(PWD) clean CC=gcc
 
 install:
 	sudo insmod simple_driver.ko
@@ -16,9 +16,6 @@ install:
 uninstall:
 	sudo rmmod simple_driver
 
-test:
-	@echo "Testing Rust simple driver..."
-	@echo "test data" | sudo tee /dev/simple_bench_rust
-	@sudo cat /dev/simple_bench_rust
+
 
 .PHONY: all clean install uninstall test

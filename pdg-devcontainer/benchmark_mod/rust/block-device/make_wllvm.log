@@ -1,0 +1,18 @@
+== wllvm build: checking wrappers ==
+Building with wllvm for bitcode extraction (using /home/devuser/.local/bin/wllvm)
+Using clang from /usr/lib/llvm-19/bin
+# Run child make with PATH set so kernel uses the intended clang and wrappers
+make[1]: Entering directory '/workspaces/UROP-Rust4Linux/pdg-devcontainer/linux-rust'
+make[2]: Entering directory '/workspaces/UROP-Rust4Linux/pdg-devcontainer/benchmark_mod/rust/block-device'
+warning: the compiler differs from the one used to build the kernel
+  The kernel was built by: gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0
+  You are using:           Ubuntu clang version 19.1.7 (++20250114103320+cd708029e0b2-1~exp1~20250114103432.75)
+  CC [M]  blkram.mod.o
+clang: error: unknown argument: '-fconserve-stack'
+make[4]: *** [/workspaces/UROP-Rust4Linux/pdg-devcontainer/linux-rust/scripts/Makefile.modfinal:26: blkram.mod.o] Error 1
+make[3]: *** [/workspaces/UROP-Rust4Linux/pdg-devcontainer/linux-rust/Makefile:1940: modules] Error 2
+make[2]: *** [/workspaces/UROP-Rust4Linux/pdg-devcontainer/linux-rust/Makefile:248: __sub-make] Error 2
+make[2]: Leaving directory '/workspaces/UROP-Rust4Linux/pdg-devcontainer/benchmark_mod/rust/block-device'
+make[1]: *** [Makefile:248: __sub-make] Error 2
+make[1]: Leaving directory '/workspaces/UROP-Rust4Linux/pdg-devcontainer/linux-rust'
+make: *** [Makefile:33: wllvm] Error 2

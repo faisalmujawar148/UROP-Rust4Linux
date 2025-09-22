@@ -1,0 +1,1 @@
+savedcmd_blkram.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T /workspaces/UROP-Rust4Linux/pdg-devcontainer/linux-rust/scripts/module.lds -o blkram.ko blkram.o blkram.mod.o .module-common.o
