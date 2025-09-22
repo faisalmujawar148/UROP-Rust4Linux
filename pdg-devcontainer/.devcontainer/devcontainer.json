@@ -2,22 +2,36 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
+    "runArgs": [
+        "--privileged",
+        "--cap-add=SYS_MODULE",
+        "--cap-add=SYS_ADMIN",
+        "--security-opt", "apparmor:unconfined"
+    ],
+    "mounts": [
+        "source=/lib/modules,target=/lib/modules,type=bind,readonly"
+    ],
     "customizations": {
         "vscode": {
-        "extensions": [
-            "ms-vscode.cpptools-extension-pack",
-            "llvm-vs-code-extensions.vscode-clangd",
-            "ms-azuretools.vscode-docker",
-            "ms-vscode.makefile-tools",
-            "rust-lang.rust-analyzer",
-            "luveti.kconfig",
-            "plorefice.devicetree",
-            "lorent-revest.patchwork",
-            "florent-revest.git-send-email",
-            "tamasfe.even-better-toml",
-            "npxms.hide-gitignored",
-            "tur11ng.action-buttons-customizer"
-        ]}
+            "extensions": [
+                "ms-vscode.cpptools-extension-pack",
+                "llvm-vs-code-extensions.vscode-clangd",
+                "ms-azuretools.vscode-docker",
+                "ms-vscode.makefile-tools",
+                "rust-lang.rust-analyzer",
+                "luveti.kconfig",
+                "plorefice.devicetree",
+                "lorent-revest.patchwork",
+                "florent-revest.git-send-email",
+                "tamasfe.even-better-toml",
+                "npxms.hide-gitignored",
+                "tur11ng.action-buttons-customizer"
+            ]
+        }
     },
-    "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}"
+    "postStartCommand": [
+        "git config --global --add safe.directory ${containerWorkspaceFolder}",
+        "sudo sysctl kernel.dmesg_restrict=0 || true",
+        "sudo apt update && sudo apt install -y dmsetup"
+    ]
 }

@@ -1,0 +1,5 @@
+0x00000000	capacity_mb	blkram	EXPORT_SYMBOL_GPL	
+0x00000000	max_segments	blkram	EXPORT_SYMBOL_GPL	
+0x00000000	max_segment_size	blkram	EXPORT_SYMBOL_GPL	
+0x00000000	lbs	blkram	EXPORT_SYMBOL_GPL	
+0x00000000	pbs	blkram	EXPORT_SYMBOL_GPL	
