@@ -1,5 +1,7 @@
-qemu
+qemu - DONE
 
 DONE -linux qemu file setup w/ rust enabled
 
 find how to understand blockcache layer (WIP) + find good tools for comparing (benchmarking tools) - DONE
+
+make pdg work - DONE

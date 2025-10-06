@@ -1,1 +1,0 @@
-cmd_/home/cim/ug/zmac691/research/drivers/simpletest/modules.order := {   echo /home/cim/ug/zmac691/research/drivers/simpletest/hello.ko; :; } | awk '!x[$$0]++' - > /home/cim/ug/zmac691/research/drivers/simpletest/modules.order

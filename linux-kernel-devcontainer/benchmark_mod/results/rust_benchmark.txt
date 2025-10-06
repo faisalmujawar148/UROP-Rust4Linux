@@ -1,2 +1,0 @@
-Build times for rust:
-Iteration 1: FAILED

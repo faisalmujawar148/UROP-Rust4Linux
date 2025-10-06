@@ -1,24 +1,24 @@
 obj-m += blkram.o
-blkram-rust := blkram.rs
 KERNEL_DIR ?= ../../../linux-rust
 
-# Remove unnecessary flags
-ccflags-remove-y += -fconserve-stack
-asflags-remove-y += -fconserve-stack
-
-# Add bitcode emission to Rust flags
-KBUILD_RUSTFLAGS += --emit=llvm-bc
-
+CLANG_FLAGS_MODULE += -fno-conserve-stack
+KBUILD_CFLAGS_REMOVE   += -fconserve-stack
+KBUILD_AFLAGS_REMOVE   += -fconserve-stack
 all:
-	make -C $(KERNEL_DIR) M=$(PWD) modules LLVM=19
+	make -C $(KERNEL_DIR) M=$(PWD) modules LLVM=1
 
 clean:
-	make -C $(KERNEL_DIR) M=$(PWD) clean
-	rm -f *.bc *.ll *.mod.c
+	make -C $(KERNEL_DIR) M=$(PWD) clean LLVM=1
 
-extract-pdg:
-	llvm-link-19 blkram.bc .blkram.mod.o.bc $(KERNEL_DIR)/rust/kernel.bc $(KERNEL_DIR)/rust/alloc.bc $(KERNEL_DIR)/rust/core.bc -o blkram_full.bc
-	opt-19 -load /path/to/Program-Dependence-Graph-in-LLVM/build/libpdg.so -dot-pdg < blkram_full.bc > blkram_pdg.dot
-	dot -Tpng blkram_pdg.dot -o blkram_pdg.png
+extract:
+	make RUSTFLAGS="--emit=llvm-bc,obj" LLVM=1
 
-.PHONY: all clean extract-pdg
+install:
+	sudo insmod zero.ko
+
+uninstall:
+	sudo rmmod zero
+
+
+
+.PHONY: all clean install uninstall test

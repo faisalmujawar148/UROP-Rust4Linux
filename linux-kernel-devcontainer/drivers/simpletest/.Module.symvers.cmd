@@ -1,1 +1,0 @@
-cmd_/home/cim/ug/zmac691/research/drivers/simpletest/Module.symvers := sed 's/\.ko$$/\.o/' /home/cim/ug/zmac691/research/drivers/simpletest/modules.order | scripts/mod/modpost -m -a  -o /home/cim/ug/zmac691/research/drivers/simpletest/Module.symvers -e -i Module.symvers   -T -
